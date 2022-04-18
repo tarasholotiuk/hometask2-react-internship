@@ -1,10 +1,13 @@
 import React from "react";
 import Tasks from "./components/Tasks";
-import Info from "./components/Info";
+// import Info from "./components/Info";
+import { ITask } from "./types/types";
 
-function App() {
-  const arr = [
+
+const App = () => {
+  const tasks = [
     {
+      id: 1,
       iconTask: "idea.png",
       name: "test1",
       created: "April 8, 2022",
@@ -14,6 +17,7 @@ function App() {
       isArchived: false,
     },
     {
+      id: 2,
       iconTask: "lateral.png",
       name: "test2",
       created: "June 13, 2021",
@@ -23,6 +27,7 @@ function App() {
       isArchived: true,
     },
     {
+      id: 3,
       iconTask: "idea.png",
       name: "test3",
       created: "May 18, 2020",
@@ -32,6 +37,7 @@ function App() {
       isArchived: false,
     },
     {
+      id: 4,
       iconTask: "shopping-cart.png",
       name: "test4",
       created: "July 22, 2021",
@@ -41,6 +47,7 @@ function App() {
       isArchived: true,
     },
     {
+      id: 5,
       iconTask: "shopping-cart.png",
       name: "test5",
       created: "April 8, 2022",
@@ -50,6 +57,7 @@ function App() {
       isArchived: false,
     },
     {
+      id: 6,
       iconTask: "lateral.png",
       name: "test6",
       created: "May 18, 2020",
@@ -59,6 +67,7 @@ function App() {
       isArchived: true,
     },
     {
+      id: 7,
       iconTask: "idea.png",
       name: "test7",
       created: "July 22, 2021",
@@ -68,33 +77,23 @@ function App() {
       isArchived: false,
     },
   ];
-
-  const categoryList = ["Task", "Random Thought", "Idea"]
-
-  // const [tasks, setTask] = useState(arr);
-  // console.log(tasks)
-  // for(let item of tasks) {
-  //   let task = tasks[item];
-  //   return task
-  // }
+  
+  const categoryList = ["Task", "Random Thought", "Idea"];
 
   return (
     <div className="App">
-      <Tasks arr={arr}/>
-      
-      <Info categoryList={categoryList} arr={arr}/>
-      
-    
-        {/* <Header />
+      <Tasks arr = {tasks} />
+
+      {/* <Info categoryList={categoryList} arr={arr}/> */}
+
+      {/* <Header />
         {arr
           .filter((el) => el.isArchived !== true)
           .map((el, index) => (
             <Item task={el} key={index} />
           ))} */}
-
-      
     </div>
   );
-}
+};
 
 export default App;
