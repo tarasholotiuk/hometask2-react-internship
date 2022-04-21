@@ -1,37 +1,28 @@
-import React, { useState, FC } from "react";
+import React from "react";
 import Header from "./Header";
+import { useSelector, useDispatch } from "react-redux";
 import Item from "./Item";
 import { ITask } from "../types/types";
+import { addTodo } from "../store/todoSlice";
 
-interface ITasks {
-  arr: ITask[]
-}
 
-const Tasks: FC<ITasks> = ({arr}) => {
+const Tasks = () => {
+  const dispatch = useDispatch();
+  const addTask = () => dispatch(addTodo([]));
 
-  const [tasks, setArchived] = useState(arr);
-
-  const changeIsArchived = (key: number) => {
-    setArchived(
-      tasks.map((task) => {
-        if (task.id == key) {
-          task.isArchived = true;
-        }
-        console.log(task);
-        return task;
-      })
-    );
-  };
+  const tasks: ITask[] = useSelector((store: any) => store.todos.todos);
 
   return (
     <div>
       <Header />
       {tasks
-      .filter((task) => task.isArchived != true)
-      .map((task) => 
-        <Item {...task} key={task.id} />
-        // <Item {...task} changeIsArchived={changeIsArchived} key={elem.id} />
-      )}
+        .filter((task: ITask) => task.isArchived !== true)
+        .map((task: ITask) => (
+          <Item {...task} key={task.id} />
+        ))}
+      <button id="button-create-task" onClick={addTask}>
+        Add task
+      </button>
     </div>
   );
 };

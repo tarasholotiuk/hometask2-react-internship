@@ -1,6 +1,14 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { removeAllTodos } from "../store/todoSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const deleteAllTasks = () => {
+    console.log("deleteAllTasks")
+    dispatch(removeAllTodos({}));
+  };
+
   return (
     <div id="header" className="header invert">
       <div className="name-header">
@@ -31,6 +39,7 @@ const Header = () => {
           className="icon-delete"
           src="./images/icon/delete.png"
           alt="error"
+          onClick={() => deleteAllTasks()}
         />
       </div>
     </div>

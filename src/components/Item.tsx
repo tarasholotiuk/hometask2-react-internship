@@ -1,14 +1,29 @@
-import React, { useState, FC} from "react";
+import React, {FC} from "react";
+// import {useSelector} from "react-redux";
 import { ITask } from "../types/types";
+import { useDispatch } from "react-redux";
+import { editTodo, archiveTodo, removeTodo} from "../store/todoSlice"
 
 
 const Item: FC<ITask> = (task) => {
-console.log(task)
+
+const dispatch = useDispatch();
+
+const editTask = (e: any) => {
+  dispatch(editTodo({}))
+}
+
+const changeIsArchived = (e: any) =>{
+  dispatch(archiveTodo({id: Number(e.target.parentNode.parentNode.id)}))
+};
+
+const deleteTask = (e: any) =>{
+  dispatch(removeTodo({id: Number(e.target.parentNode.parentNode.id)}))
+};
 
   // const Item = (task: ITask, { changeIsArchived }) => {
   return (
-    <div className="item">
-    {/* <div className="item" id={task.id}> */}
+    <div className="item" id={String(task.id)}>
       <div className="name">
         <div className="icon-task-name-blok">
           <img
@@ -36,19 +51,19 @@ console.log(task)
           className="icon-edit"
           src="./images/icon/edit2.png"
           alt="error"
-          onClick={(e) => console.log(e)}
+          onClick={(e) => editTask(e)}
         />
         <img
           className="icon-archive"
           src="./images/icon/archive2.png"
           alt="error"
-          // onClick={(e) => changeIsArchived(e.target.parentNode.parentNode.id)}
+          onClick={(e) => changeIsArchived(e)}
         />
         <img
           className="icon-delete"
           src="./images/icon/delete2.png"
           alt="error"
-          onClick={(e) => console.log(e)}
+          onClick={(e) => deleteTask(e)}
         />
       </div>
     </div>
