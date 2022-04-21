@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const regex =
+  /(3[01]|[12][0-9]|0?[1-9])[\/.-](1[0-2]|0?[1-9])[\/.-](?:[0-9]{2})?[0-9]{2}/gm;
+
 const todoSlice = createSlice({
   name: "todos",
   initialState: {
@@ -31,7 +34,7 @@ const todoSlice = createSlice({
         created: "May 18, 2020",
         category: "Idea",
         content: "text3",
-        dates: "",
+        dates: ["02.01.2020"],
         isArchived: false,
       },
       {
@@ -76,22 +79,92 @@ const todoSlice = createSlice({
       },
     ],
     categoryList: ["Task", "Random Thought", "Idea"],
+    isInputActive: false,
+    nameValue: "",
+    categoryValue: "",
+    contentValue: "",
+    who: "",
   },
   reducers: {
     addTodo(state, action) {
-      state.todos
-        .push
-        //new element
-        ();
-      console.log(state, action);
+      if (state.isInputActive === false) {
+        state.isInputActive = !state.isInputActive;
+      } else if (
+        state.nameValue.trim().length > 0 &&
+        state.categoryValue.trim().length > 0 &&
+        state.contentValue.trim().length > 0
+      ) {
+        if (state.who !== "") {
+          state.todos.forEach((todo) => {
+            if (String(todo.id) === state.who) {
+              todo.name = state.nameValue;
+              todo.category = state.categoryValue;
+              todo.content = state.contentValue;
+            }
+          });
+          state.who = "";
+        } else {
+          let obj = {
+            id: state.todos[state.todos.length - 1].id + 1,
+            name: state.nameValue.trim(),
+            created: new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+            category: state.categoryValue,
+            content: state.contentValue,
+            dates: (() => {
+              let dates: any;
+              state.contentValue.match(regex) !== null
+                ? (dates = state.contentValue.match(regex)?.join(", "))
+                : (dates = "");
+              return dates;
+            })(),
+            isArchived: false,
+            iconTask: (() => {
+              let iconTask = "";
+              switch (state.categoryValue) {
+                case "Task":
+                  iconTask = "shopping-cart.png";
+                  break;
+                case "Random Thought":
+                  iconTask = "lateral.png";
+                  break;
+                case "Idea":
+                  iconTask = "idea.png";
+                  break;
+                default:
+                  iconTask = "shopping-cart.png";
+                  break;
+              }
+              return iconTask;
+            })(),
+          };
+          state.todos.push(obj);
+        }
+        state.nameValue = "";
+        state.categoryValue = "";
+        state.contentValue = "";
+        state.isInputActive = !state.isInputActive;
+      }
     },
 
     editTodo(state, action) {
-      console.log(state, action);
+      if (Object.keys(action.payload).length > 0) {
+        state.isInputActive = !state.isInputActive;
+        state.who = String(action.payload.id);
+        state.todos.forEach((todo) => {
+          if (todo.id === action.payload.id) {
+            state.nameValue = todo.name;
+            state.categoryValue = todo.category;
+            state.contentValue = todo.content;
+          }
+        });
+      }
     },
 
     archiveTodo(state, action) {
-      // console.log(state.todos.filter(todo => todo.id == action.payload.id))
       state.todos.forEach((todo) =>
         todo.id === action.payload.id ? (todo.isArchived = true) : null
       );
@@ -111,9 +184,22 @@ const todoSlice = createSlice({
     removeAllTodos(state, action) {
       state.todos = [];
     },
+
+    setValue(state, action) {
+      state.nameValue = action.payload.nameValue;
+      state.categoryValue = action.payload.categoryValue;
+      state.contentValue = action.payload.contentValue;
+    },
   },
 });
 
-export const { addTodo, editTodo, archiveTodo, removeTodo, removeAllTodos } = todoSlice.actions;
+export const {
+  addTodo,
+  editTodo,
+  archiveTodo,
+  removeTodo,
+  removeAllTodos,
+  setValue,
+} = todoSlice.actions;
 
 export default todoSlice.reducer;

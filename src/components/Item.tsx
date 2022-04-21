@@ -1,5 +1,4 @@
 import React, {FC} from "react";
-// import {useSelector} from "react-redux";
 import { ITask } from "../types/types";
 import { useDispatch } from "react-redux";
 import { editTodo, archiveTodo, removeTodo} from "../store/todoSlice"
@@ -10,7 +9,7 @@ const Item: FC<ITask> = (task) => {
 const dispatch = useDispatch();
 
 const editTask = (e: any) => {
-  dispatch(editTodo({}))
+  dispatch(editTodo({id: Number(e.target.parentNode.parentNode.id)}))
 }
 
 const changeIsArchived = (e: any) =>{

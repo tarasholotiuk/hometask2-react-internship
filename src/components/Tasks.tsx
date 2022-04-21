@@ -4,11 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Item from "./Item";
 import { ITask } from "../types/types";
 import { addTodo } from "../store/todoSlice";
-
+import InputForm from "./InputForm";
 
 const Tasks = () => {
   const dispatch = useDispatch();
-  const addTask = () => dispatch(addTodo([]));
+  let activeInput = useSelector((store: any) => store.todos.isInputActive);
+  const addTask = () => {
+    dispatch(addTodo({}));
+  };
 
   const tasks: ITask[] = useSelector((store: any) => store.todos.todos);
 
@@ -20,6 +23,7 @@ const Tasks = () => {
         .map((task: ITask) => (
           <Item {...task} key={task.id} />
         ))}
+      {activeInput ? <InputForm /> : null}
       <button id="button-create-task" onClick={addTask}>
         Add task
       </button>
