@@ -84,6 +84,7 @@ const todoSlice = createSlice({
     categoryValue: "",
     contentValue: "",
     who: "",
+    isArchive: false,
   },
   reducers: {
     addTodo(state, action) {
@@ -107,7 +108,7 @@ const todoSlice = createSlice({
                   : (dates = "");
                 return dates;
               })();
-              todo.iconTask =(() => {
+              todo.iconTask = (() => {
                 let iconTask = "";
                 switch (state.categoryValue) {
                   case "Task":
@@ -125,7 +126,6 @@ const todoSlice = createSlice({
                 }
                 return iconTask;
               })();
-
             }
           });
           state.who = "";
@@ -185,7 +185,6 @@ const todoSlice = createSlice({
             state.nameValue = todo.name;
             state.categoryValue = todo.category;
             state.contentValue = todo.content;
-            
           }
         });
       }
@@ -202,14 +201,13 @@ const todoSlice = createSlice({
     },
 
     unarchiveTodo(state, action) {
-      console.log(state.todos.filter((todo) => todo.id === action.payload.id));
       state.todos.forEach((todo) =>
         todo.id === action.payload.id ? (todo.isArchived = false) : null
       );
     },
 
     removeAllTodos(state, action) {
-      state.todos = [];
+      state.todos.splice(0);
     },
 
     setValue(state, action) {
@@ -217,6 +215,11 @@ const todoSlice = createSlice({
       state.categoryValue = action.payload.categoryValue;
       state.contentValue = action.payload.contentValue;
     },
+
+    toggleArchive(state, action) {
+      state.isArchive = !state.isArchive;
+    },
+    
   },
 });
 
@@ -226,7 +229,9 @@ export const {
   archiveTodo,
   removeTodo,
   removeAllTodos,
+  unarchiveTodo,
   setValue,
+  toggleArchive,
 } = todoSlice.actions;
 
 export default todoSlice.reducer;

@@ -12,21 +12,25 @@ const Tasks = () => {
   const addTask = () => {
     dispatch(addTodo({}));
   };
-
+  const isArchive = useSelector((store: any) => store.todos.isArchive);
   const tasks: ITask[] = useSelector((store: any) => store.todos.todos);
 
   return (
     <div>
       <Header />
-      {tasks
-        .filter((task: ITask) => task.isArchived !== true)
-        .map((task: ITask) => (
-          <Item {...task} key={task.id} />
-        ))}
+      {!isArchive
+        ? tasks
+            .filter((task: ITask) => task.isArchived !== true)
+            .map((task: ITask) => <Item {...task} key={task.id} />)
+        : tasks
+            .filter((task: ITask) => task.isArchived === true)
+            .map((task: ITask) => <Item {...task} key={task.id} />)}
       {activeInput ? <InputForm /> : null}
-      <button id="button-create-task" onClick={addTask}>
-        Add task
-      </button>
+      {!isArchive ? (
+        <button id="button-create-task" onClick={addTask}>
+          Add task
+        </button>
+      ) : null}
     </div>
   );
 };

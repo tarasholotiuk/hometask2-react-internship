@@ -7,13 +7,6 @@ function App() {
     <div className="App">
       <Tasks />
       <Info />
-
-      {/* <Header />
-        {arr
-          .filter((el) => el.isArchived !== true)
-          .map((el, index) => (
-            <Item task={el} key={index} />
-          ))} */}
     </div>
   );
 }

@@ -1,24 +1,27 @@
-import React, {FC} from "react";
+import React, { FC } from "react";
 import { ITask } from "../types/types";
-import { useDispatch } from "react-redux";
-import { editTodo, archiveTodo, removeTodo} from "../store/todoSlice"
-
+import { useSelector, useDispatch } from "react-redux";
+import { editTodo, archiveTodo, removeTodo, unarchiveTodo } from "../store/todoSlice";
 
 const Item: FC<ITask> = (task) => {
+  const dispatch = useDispatch();
+  const isArchive = useSelector((store: any) => store.todos.isArchive);
 
-const dispatch = useDispatch();
+  const editTask = (e: any) => {
+    dispatch(editTodo({ id: Number(e.target.parentNode.parentNode.id) }));
+  };
 
-const editTask = (e: any) => {
-  dispatch(editTodo({id: Number(e.target.parentNode.parentNode.id)}))
-}
+  const changeIsArchived = (e: any) => {
+    dispatch(archiveTodo({ id: Number(e.target.parentNode.parentNode.id) }));
+  };
 
-const changeIsArchived = (e: any) =>{
-  dispatch(archiveTodo({id: Number(e.target.parentNode.parentNode.id)}))
-};
+  const deleteTask = (e: any) => {
+    dispatch(removeTodo({ id: Number(e.target.parentNode.parentNode.id) }));
+  };
 
-const deleteTask = (e: any) =>{
-  dispatch(removeTodo({id: Number(e.target.parentNode.parentNode.id)}))
-};
+  const unarchiveTask = (e: any) => {
+    dispatch(unarchiveTodo({ id: Number(e.target.parentNode.parentNode.id) }));
+  }
 
   // const Item = (task: ITask, { changeIsArchived }) => {
   return (
@@ -45,26 +48,36 @@ const deleteTask = (e: any) =>{
       <div className="dates">
         <span>{task.dates}</span>
       </div>
-      <div className="icon-task-blok">
-        <img
-          className="icon-edit"
-          src="./images/icon/edit2.png"
-          alt="error"
-          onClick={(e) => editTask(e)}
-        />
-        <img
-          className="icon-archive"
-          src="./images/icon/archive2.png"
-          alt="error"
-          onClick={(e) => changeIsArchived(e)}
-        />
-        <img
-          className="icon-delete"
-          src="./images/icon/delete2.png"
-          alt="error"
-          onClick={(e) => deleteTask(e)}
-        />
-      </div>
+      {!isArchive ? (
+        <div className="icon-task-blok">
+          <img
+            className="icon-edit"
+            src="./images/icon/edit2.png"
+            alt="error"
+            onClick={(e) => editTask(e)}
+          />
+          <img
+            className="icon-archive"
+            src="./images/icon/archive2.png"
+            alt="error"
+            onClick={(e) => changeIsArchived(e)}
+          />
+          <img
+            className="icon-delete"
+            src="./images/icon/delete2.png"
+            alt="error"
+            onClick={(e) => deleteTask(e)}
+          />
+        </div>
+      ) : (
+        <div className="icon-task-blok">
+          <img
+            className="icon-unarchive"
+            src="./images/icon/unarchive.png"
+            onClick={(e) => unarchiveTask(e)}
+          ></img>
+        </div>
+      )}
     </div>
   );
 };
