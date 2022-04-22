@@ -100,6 +100,32 @@ const todoSlice = createSlice({
               todo.name = state.nameValue;
               todo.category = state.categoryValue;
               todo.content = state.contentValue;
+              todo.dates = (() => {
+                let dates: any;
+                state.contentValue.match(regex) !== null
+                  ? (dates = state.contentValue.match(regex)?.join(", "))
+                  : (dates = "");
+                return dates;
+              })();
+              todo.iconTask =(() => {
+                let iconTask = "";
+                switch (state.categoryValue) {
+                  case "Task":
+                    iconTask = "shopping-cart.png";
+                    break;
+                  case "Random Thought":
+                    iconTask = "lateral.png";
+                    break;
+                  case "Idea":
+                    iconTask = "idea.png";
+                    break;
+                  default:
+                    iconTask = "shopping-cart.png";
+                    break;
+                }
+                return iconTask;
+              })();
+
             }
           });
           state.who = "";
@@ -159,6 +185,7 @@ const todoSlice = createSlice({
             state.nameValue = todo.name;
             state.categoryValue = todo.category;
             state.contentValue = todo.content;
+            
           }
         });
       }
